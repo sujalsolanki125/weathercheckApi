@@ -24,6 +24,6 @@
 ### 🌐 Live Demo *(Optional)*
 
 If hosted:
-👉 [your-demo-link.com]([https://your-demo-link.com](https://weathercheck-git-main-sujalkumar-solankis-projects.vercel.app/))
+👉 [your-demo-link.com](https://your-demo-link.com](https://weathercheck-git-main-sujalkumar-solankis-projects.vercel.app/)
 
 
