@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Weather Check</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #3f87a6, #ebf8e1);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 40px 20px;
+      color: #333;
+    }
+
+    h1 {
+      font-size: 3em;
+      font-weight: bold;
+      color: white;
+      margin-bottom: 0.2em;
+    }
+
+    p.subtitle {
+      font-size: 1.2em;
+      color: #e0f7fa;
+      margin-bottom: 2em;
+    }
+
+    .search-container {
+      background: white;
+      padding: 10px;
+      border-radius: 12px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      max-width: 600px;
+      width: 100%;
+    }
+
+    .search-container input {
+      flex: 1;
+      padding: 12px;
+      font-size: 16px;
+      border: none;
+      border-radius: 8px;
+      outline: none;
+    }
+
+    .search-container button {
+      padding: 12px 20px;
+      font-size: 16px;
+      border: none;
+      border-radius: 8px;
+      background: #1e88e5;
+      color: white;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    .search-container button:hover {
+      background: #1565c0;
+    }
+
+    .result-card {
+      margin-top: 30px;
+      background: white;
+      padding: 30px;
+      border-radius: 16px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+      max-width: 600px;
+      width: 100%;
+      text-align: center;
+    }
+
+    .result-card img {
+      width: 64px;
+      height: 64px;
+    }
+
+    .result-card h2 {
+      margin-top: 10px;
+    }
+
+    .result-card p {
+      font-size: 1.1em;
+      margin: 8px 0;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Weather Check</h1>
+  <p class="subtitle">Get real-time weather information for any location</p>
+
+  <div class="search-container">
+    <input type="text" id="locationInput" placeholder="Enter city name (e.g., London, New York, Tokyo)">
+    <button onclick="checkWeather()">🔍 Check Weather</button>
+  </div>
+
+  <div id="result" class="result-card" style="display: none;">
+    <img id="weatherIcon" src="" alt="">
+    <h2 id="locationName"></h2>
+    <p id="temperature"></p>
+    <p id="condition"></p>
+    <p id="humidity"></p>
+    <p id="wind"></p>
+    <p id="aqi"></p>
+  </div>
+
+  <script>
+    async function checkWeather() {
+      const location = document.getElementById('locationInput').value.trim();
+      if (!location) {
+        alert("Please enter a city name.");
+        return;
+      }
+
+      const apiKey = '6d90b6d9320a4c778b775653252505';
+      const url = `http://api.weatherapi.com/v1/current.json?key=${apiKey}&q=${encodeURIComponent(location)}&aqi=yes`;
+
+      try {
+        const response = await fetch(url);
+        if (!response.ok) {
+          throw new Error("Unable to fetch weather data.");
+        }
+
+        const data = await response.json();
+
+        document.getElementById('weatherIcon').src = "https:" + data.current.condition.icon;
+        document.getElementById('locationName').textContent = `${data.location.name}, ${data.location.country}`;
+        document.getElementById('temperature').textContent = `🌡️ Temperature: ${data.current.temp_c} °C`;
+        document.getElementById('condition').textContent = `🌤️ Condition: ${data.current.condition.text}`;
+        document.getElementById('humidity').textContent = `💧 Humidity: ${data.current.humidity}%`;
+        document.getElementById('wind').textContent = `💨 Wind: ${data.current.wind_kph} kph`;
+        document.getElementById('aqi').textContent = `🌫️ Air Quality (PM2.5): ${data.current.air_quality.pm2_5.toFixed(2)}`;
+
+        document.getElementById('result').style.display = 'block';
+
+      } catch (err) {
+        alert(err.message);
+      }
+    }
+  </script>
+
+</body>
+</html>
